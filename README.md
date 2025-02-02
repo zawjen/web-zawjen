@@ -1,3 +1,4 @@
+# Introduction
 The Zawjen al-Tawheed project aims to reconnect people with nature and promote the message of Tawheed (monotheism) through a digital platform. It plans to provide accessible content in multiple languages, focusing on differentiating truth from falsehood using verified and categorized information (green, red, yellow). The initiative emphasizes open-source collaboration, welcoming contributions from developers, scholars, translators, and more. The platform will eventually expand to include diverse content and create a global, scholarly environment for knowledge seekers.
 
 For a detailed UX design document based on this mission, here’s a suggested structure:
