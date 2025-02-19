@@ -1,8 +1,17 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { HeartIcon, XIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  EllipsisVerticalIcon,
+  HeartIcon,
+  Share2Icon,
+  XIcon,
+} from "lucide-react";
 import { useMainContext } from "@/context";
+import React, { useEffect } from "react";
+import Card from "../ui/card";
+import DropdownMenu from "../ui/dropdown-menu";
 
 interface Location {
   text: string;
@@ -54,8 +63,6 @@ export default function Results() {
   const result: SearchResult | null =
     (query.data ? JSON.parse(query.data) : null) ?? resultData;
 
-  mainContext?.setFilters(result?.search_filters ?? []);
-
   const getBackgroundColor = (classification: string) => {
     switch (classification) {
       case "Green":
@@ -84,6 +91,10 @@ export default function Results() {
     console.log("Share article");
   };
 
+  useEffect(() => {
+    mainContext?.setFilters(result?.search_filters ?? []);
+  }, []);
+
   return (
     <section className="w-screen p-4">
       <header className="overflow-x-hidden pb-4">
@@ -94,42 +105,120 @@ export default function Results() {
           </p>
         </div>
       </header>
-      <h1 className="text-2xl font-bold">Search: {result?.search_text}</h1>
+      <main>
+        <h1 className="text-2xl font-bold">Search: {result?.search_text}</h1>
 
-      {result?.datasets.map((dataset, index) => (
-        <Link href={`/detail/${index}`} key={index}>
-          <div
-            className={`${getBackgroundColor(
-              dataset.classification
-            )} block p-4 my-2 rounded`}
-          >
-            <h2 className="text-xl font-semibold">Format: {dataset.format}</h2>
-            <p>Type: {dataset.type}</p>
-            <p>Language: {dataset.language}</p>
-            <p>Date Created: {dataset.date_created}</p>
-            <p>Date Updated: {dataset.date_updated}</p>
-            {dataset.locations.map((location, idx) => (
-              <p key={idx} className="text-blue-600 underline">
-                {location.text}
-              </p>
-            ))}
-          </div>
-        </Link>
-      ))}
-
-      <div className="mt-4 space-x-2">
-        <Button onClick={() => handleDownload("PDF")}>Download PDF</Button>
-        <Button onClick={() => handleDownload("Word")}>Download Word</Button>
-        <Button onClick={() => handleDownload("PNG")}>Download PNG</Button>
-      </div>
-      <div className="mt-4 space-x-2">
-        <Button variant="outline" onClick={handleCopyUrl}>
-          Copy URL
-        </Button>
-        <Button variant="outline" onClick={handleShare}>
-          Share
-        </Button>
-      </div>
+        {result?.datasets.map((dataset, index) => (
+          <React.Fragment key={index}>
+            <Card
+              cardHeader={{
+                className: "flex-row justify-self-end gap-2",
+                children: (
+                  <>
+                    <DropdownMenu
+                      menuTriggerElement={
+                        <Button size={"icon"} variant={"default"}>
+                          <Share2Icon />
+                        </Button>
+                      }
+                      menuContent={{
+                        menuGroup: [
+                          {
+                            item: {
+                              children: (
+                                <Button
+                                  variant="outline"
+                                  onClick={handleCopyUrl}
+                                >
+                                  Copy URL
+                                </Button>
+                              ),
+                            },
+                          },
+                          {
+                            item: {
+                              children: (
+                                <Button variant="outline" onClick={handleShare}>
+                                  Share
+                                </Button>
+                              ),
+                            },
+                          },
+                        ],
+                      }}
+                    />
+                    <DropdownMenu
+                      menuTriggerElement={
+                        <Button
+                          className="!mt-0"
+                          size={"icon"}
+                          variant={"default"}
+                        >
+                          <DownloadIcon />
+                        </Button>
+                      }
+                      menuContent={{
+                        menuGroup: [
+                          {
+                            item: {
+                              children: (
+                                <Button onClick={() => handleDownload("PDF")}>
+                                  Download PDF
+                                </Button>
+                              ),
+                            },
+                          },
+                          {
+                            item: {
+                              children: (
+                                <Button onClick={() => handleDownload("Word")}>
+                                  Download Word
+                                </Button>
+                              ),
+                            },
+                          },
+                          {
+                            item: {
+                              children: (
+                                <Button onClick={() => handleDownload("PNG")}>
+                                  Download PNG
+                                </Button>
+                              ),
+                            },
+                          },
+                        ],
+                      }}
+                    />
+                  </>
+                ),
+              }}
+              cardContent={
+                <Link href={`/detail/${index}`}>
+                  <div
+                    className={`${getBackgroundColor(
+                      dataset.classification
+                    )} block p-4 my-2 rounded`}
+                  >
+                    <h2 className="text-xl font-semibold">
+                      Format: {dataset.format}
+                    </h2>
+                    <p>Type: {dataset.type}</p>
+                    <p>Language: {dataset.language}</p>
+                    <p>Date Created: {dataset.date_created}</p>
+                    <p>Date Updated: {dataset.date_updated}</p>
+                    {dataset.locations.map((location, idx) => (
+                      <p key={idx} className="text-blue-600 underline">
+                        {location.text}
+                      </p>
+                    ))}
+                  </div>
+                </Link>
+              }
+              // cardFooter={}
+            />
+          </React.Fragment>
+        ))}
+      </main>
     </section>
   );
 }

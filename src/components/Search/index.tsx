@@ -30,7 +30,7 @@ export default function Search() {
   };
 
   return (
-    <div className="bg-foreground py-4 px-2 flex items-center gap-2">
+    <div className="bg-foreground py-4 px-2 flex items-center justify-between sm:justify-normal gap-2">
       <Input onChange={handleOnChange} />
       <Button
         variant="default"
@@ -38,7 +38,7 @@ export default function Search() {
         data-testid="search-button"
       >
         <SearchIcon size={16} />
-        <span className="hidden md:inline">Search</span>
+        <span className="hidden sm:inline">Search</span>
       </Button>
     </div>
   );

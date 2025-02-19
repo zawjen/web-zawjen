@@ -65,7 +65,7 @@ export default function FilterScreen() {
 
   return (
     <>
-      <div className="p-2 overflow-x-hidden ">
+      <div className="w-screen p-2 overflow-x-hidden ">
         <div className="whitespace-nowrap overflow-x-auto flex items-center gap-2">
           <Button
             variant="outline"
